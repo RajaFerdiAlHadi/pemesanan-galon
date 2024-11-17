@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aplikasi Pemesanan Galon</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #00007e 100%);
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      /* Animated background effect */
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05'/%3E%3C/svg%3E");
+        z-index: -1;
+        animation: backgroundMove 60s linear infinite;
+      }
+
+      @keyframes backgroundMove {
+        0% { background-position: 0 0; }
+        100% { background-position: 100% 100%; }
+      }
+
+      .sidebar {
+        width: 250px;
+        height: 100vh;
+        position: fixed;
+        background: rgba(72, 52, 212, 0.95);
+        backdrop-filter: blur(10px);
+        color: white;
+        padding: 20px;
+        transition: all 0.3s ease;
+        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 24px;
+        margin-bottom: 40px;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 15px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .logo::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+          45deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        transform: rotate(45deg);
+        animation: shine 3s infinite;
+      }
+
+      @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+      }
+
+      .nav-btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px;
+        border: none;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        text-align: left;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .nav-btn::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        transform: translate(-50%, -50%) scale(0);
+        border-radius: 50%;
+        transition: transform 0.5s;
+      }
+
+      .nav-btn:hover::after {
+        transform: translate(-50%, -50%) scale(2);
+      }
+
+      .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateX(5px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .main-content {
+        margin-left: 250px;
+        padding: 20px;
+        transition: all 0.3s ease;
+      }
+
+      .header {
+        background: linear-gradient(90deg, #1a02b6 0%, #4c66e7 100%);
+        padding: 20px;
+        border-radius: 15px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+          45deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        transform: rotate(45deg);
+        animation: headerShine 5s infinite;
+      }
+
+      @keyframes headerShine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        transform: translateY(0);
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+        position: relative;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #4834d4;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .form-group:focus-within label {
+        color: #3f5efb;
+        transform: translateX(5px);
+      }
+
+      input[type="text"],
+      input[type="number"],
+      input[type="email"] {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.9);
+      }
+
+      input[type="text"]:focus,
+      input[type="number"]:focus,
+      input[type="email"]:focus {
+        border-color: #4834d4;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(72, 52, 212, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .submit-btn {
+        background: linear-gradient(90deg, #fc466b 0%, #3f5efb 100%);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .submit-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: all 0.5s ease;
+      }
+
+      .submit-btn:hover::before {
+        left: 100%;
+      }
+
+      .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .list-container {
+        margin-top: 20px;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 15px;
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+      }
+
+      .list-container:hover {
+        background: rgba(255, 255, 255, 0.9);
+        transform: scale(1.01);
+      }
+
+      @media (max-width: 768px) {
+        .sidebar {
+          width: 70px;
+          padding: 15px 10px;
+        }
+        
+        .sidebar span {
+          display: none;
+        }
+        
+        .main-content {
+          margin-left: 70px;
+        }
+        
+        .logo {
+          justify-content: center;
+          padding: 10px;
+        }
+        
+        .logo span {
+          display: none;
+        }
+
+        .nav-btn {
+          justify-content: center;
+          padding: 15px;
+        }
+
+        .card {
+          padding: 15px;
+        }
+      }
+
+      /* Loading animation for submit buttons */
+      @keyframes submitPulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(0.95); }
+        100% { transform: scale(1); }
+      }
+
+      .submit-btn:active {
+        animation: submitPulse 0.3s ease;
+      }
+    </style>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <!-- Struktur body sama seperti sebelumnya -->
+  <body>
+    <!-- Content sama seperti sebelumnya -->
+    <div class="sidebar">
+      <div class="logo">
+        <i class="fas fa-water"></i>
+        <span>GalonKu</span>
+      </div>
+      <nav class="nav-tabs">
+        <button onclick="showForm('pesanan')" class="nav-btn">
+          <i class="fas fa-shopping-cart"></i>
+          <span>Pesanan</span>
+        </button>
+        <button onclick="showForm('pelanggan')" class="nav-btn">
+          <i class="fas fa-users"></i>
+          <span>Pelanggan</span>
+        </button>
+        <button onclick="showForm('produk')" class="nav-btn">
+          <i class="fas fa-box"></i>
+          <span>Produk</span>
+        </button>
+        <button onclick="showForm('pembayaran')" class="nav-btn">
+          <i class="fas fa-credit-card"></i>
+          <span>Pembayaran</span>
+        </button>
+        <button onclick="showForm('pengiriman')" class="nav-btn">
+          <i class="fas fa-truck"></i>
+          <span>Pengiriman</span>
+        </button>
+      </nav>
+    </div>
+
+    <div class="main-content">
+      <div class="header">
+        <h1>Pemesanan Galon</h1>
+      </div>
+      
+
+      <div class="content-wrapper">
+        <div id="pesananForm" class="form-section card">
+          <h2><i class="fas fa-shopping-cart"></i> Pesanan</h2>
+          <form id="formPesanan">
+            <input type="hidden" id="pesananId" />
+            <div class="form-group">
+              <label><i class="fas fa-user"></i> Nama:</label>
+              <input type="text" id="nama" required />
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-map-marker-alt"></i> Alamat:</label>
+              <input type="text" id="alamat" required />
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-phone"></i> No HP:</label>
+              <input type="text" id="hp" required />
+            </div>
+            <button type="submit" class="submit-btn">
+              <i class="fas fa-save"></i> Simpan Pesanan
+            </button>
+          </form>
+          <div id="pesananList" class="list-container"></div>
+        </div>
+
+        <!-- Form-form lainnya tetap sama -->
+        <div id="pelangganForm" class="form-section card" style="display: none">
+          <h2><i class="fas fa-users"></i> Pelanggan</h2>
+          <form id="formPelanggan">
+            <input type="hidden" id="pelangganId" />
+            <div class="form-group">
+              <label>Nama:</label>
+              <input type="text" id="namaPelanggan" required />
+            </div>
+            <div class="form-group">
+              <label>Umur:</label>
+              <input type="number" id="umur" required />
+            </div>
+            <div class="form-group">
+              <label>Email:</label>
+              <input type="text" id="email" required />
+            </div>
+            <button type="submit" class="submit-btn">
+              <i class="fas fa-save"></i> Simpan Pelanggan
+            </button>
+          </form>
+          <div id="pelangganList" class="list-container"></div>
+        </div>
+
+        <div id="produkForm" class="form-section card" style="display: none">
+          <h2><i class="fas fa-box"></i> Produk</h2>
+          <form id="formProduk">
+            <input type="hidden" id="produkId" />
+            <div class="form-group">
+              <label>Nama Produk:</label>
+              <input type="text" id="namaProduk" required />
+            </div>
+            <button type="submit" class="submit-btn">
+              <i class="fas fa-save"></i> Simpan Produk
+            </button>
+          </form>
+          <div id="produkList" class="list-container"></div>
+        </div>
+
+        <div id="pembayaranForm" class="form-section card" style="display: none">
+          <h2><i class="fas fa-credit-card"></i> Pembayaran</h2>
+          <form id="formPembayaran">
+            <input type="hidden" id="pembayaranId" />
+            <div class="form-group">
+              <label>Pembayaran:</label>
+              <input type="text" id="pembayaran" required />
+            </div>
+            <button type="submit" class="submit-btn">
+              <i class="fas fa-save"></i> Simpan Pembayaran
+            </button>
+          </form>
+          <div id="pembayaranList" class="list-container"></div>
+        </div>
+
+        <div id="pengirimanForm" class="form-section card" style="display: none">
+          <h2><i class="fas fa-truck"></i> Pengiriman</h2>
+          <form id="formPengiriman">
+            <input type="hidden" id="pengirimanId" />
+            <div class="form-group">
+              <label>Pengiriman:</label>
+              <input type="text" id="pengiriman" required />
+            </div>
+            <button type="submit" class="submit-btn">
+              <i class="fas fa-save"></i> Simpan Pengiriman
+            </button>
+          </form>
+          <div id="pengirimanList" class="list-container"></div>
+        </div>
+      </div>
+    </div>
+    <script src="db.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
